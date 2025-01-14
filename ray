@@ -1,54 +1,70 @@
-local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/shlexware/Orion/main/source')))()
-local Window = OrionLib:MakeWindow({Name = "SSided", HidePremium = false, SaveConfig = true, ConfigFolder = "OrionTest"})
+local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+local Window = Rayfield:CreateWindow({
+   Name = "SSided",
+   Icon = scroll-text, -- Icon in Topbar. Can use Lucide Icons (string) or Roblox Image (number). 0 to use no icon (default).
+   LoadingTitle = "SSided Universal",
+   LoadingSubtitle = "by Noli and Alice",
+   Theme = "DarkBlue", -- Check https://docs.sirius.menu/rayfield/configuration/themes
 
---[[
-Name = FE Universals - The name of the UI.
-HidePremium = <bool> - Whether or not the user details shows Premium status or not.
-SaveConfig = <bool> - Toggles the config saving in the UI.
-ConfigFolder = Fe universals - The name of the folder where the configs are saved.
-IntroEnabled = true - Whether or not to show the intro animation.
-IntroText = SSided - Text to show in the intro animation.
-IntroIcon = rbxassetid://81479227271636 - URL to the image you want to use in the intro animation.
-Icon = rbxassetid://81479227271636 - URL to the image you want displayed on the window.
-CloseCallback = <function> - Function to execute when the window is closed.
-]]
-local Tab = Window:MakeTab({
-	Name = "Our Creations",
-	Icon = "rbxassetid://81479227271636",
-	PremiumOnly = false
+   DisableRayfieldPrompts = false,
+   DisableBuildWarnings = false, -- Prevents Rayfield from warning when the script has a version mismatch with the interface
+
+   ConfigurationSaving = {
+      Enabled = true,
+      FolderName = nil, -- Create a custom folder for your hub/game
+      FileName = "SSided Hub"
+   },
+
+   Discord = {
+      Enabled = false, -- Prompt the user to join your Discord server if their executor supports it
+      Invite = "noinvitelink", -- The Discord invite code, do not include discord.gg/. E.g. discord.gg/ ABCD would be ABCD
+      RememberJoins = true -- Set this to false to make them join the discord every time they load it up
+   },
+
+   KeySystem = false, -- Set this to true to use our key system
+   KeySettings = {
+      Title = "Untitled",
+      Subtitle = "Key System",
+      Note = "No method of obtaining the key is provided", -- Use this to tell the user how to get a key
+      FileName = "Key", -- It is recommended to use something unique as other scripts using Rayfield may overwrite your key file
+      SaveKey = true, -- The user's key will be saved, but if you change the key, they will be unable to use your script
+      GrabKeyFromSite = false, -- If this is true, set Key below to the RAW site you would like Rayfield to get the key from
+      Key = {"Hello"} -- List of keys that will be accepted by the system, can be RAW file links (pastebin, github etc) or simple strings ("hello","key22")
+   }
 })
-
---[[
-Name = <string> - The name of the tab.
-Icon = <string> - The icon of the tab.
-PremiumOnly = <bool> - Makes the tab accessible to Sirus Premium users only.
-]]
-local Section = Tab:AddSection({
-	Name = "Our Creation [R6]"
+local Tab = Window:CreateTab("Our Creation", scroll-text) -- Title, Image
+local Section = Tab:CreateSection("R6 Universal")
+Section:Set("R6 Universal")
+local Divider = Tab:CreateDivider()
+Divider:Set(true) -- Whether the divider's visibility is to be set to true or false.
+Rayfield:Destroy()
+Rayfield:Notify({
+   Title = "Welcome User",
+   Content = "Bolll",
+   Duration = 6.5,
+   Image = "rewind",
 })
-
---[[
-Name = Fe Fighter (discontinued) - The name of the section.
-]]
-Tab:AddButton({
-	Name = "Fe Fighter (discontinued)",
-	Callback = function()
+local Button = Tab:CreateButton({
+   Name = "Fe Figher",
+   Callback = function() 
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Fe-ProjectR/FE-Files/refs/heads/main/Fe%20gale.lua"))("cool")
-      		print("button pressed")
-  	end    
+-- The function that takes place when the button is pressed
+   end,
 })
-
---[[
-Name = <string> - The name of the button.
-Callback = <function> - The function of the button.
-]]
-Tab1:AddToggle({
-    Name = "Toggle",
-    Default = true,
-    Save = true,
-    Flag = "toggle"
+Button:Set("Fe Fighter")
+local Keybind = Tab:CreateKeybind({
+   Name = "Keybind Example",
+   CurrentKeybind = "Q",
+   HoldToInteract = false,
+   Flag = "Keybind1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Callback = function(Keybind)
+   -- The function that takes place when the keybind is pressed
+   -- The variable (Keybind) is a boolean for whether the keybind is being held or not (HoldToInteract needs to be true)
+   end,
 })
-
-print(OrionLib.Flags["toggle"].Value) -- prints the value of the toggle.
-OrionLib:Init()
-OrionLib:Destroy()
+Keybind:Set("RightCtrl") -- Keybind (string)
+local Label = Tab:CreateLabel("Label Example", rewind, Color3.fromRGB(255, 255, 255), false) -- Title, Icon, Color, IgnoreTheme
+Label:Set("Label Example", rewind, Color3.fromRGB(255, 255, 255), false) -- Title, Icon, Color, IgnoreTheme
+local Paragraph = Tab:CreateParagraph({Title = "Paragraph Example", Content = "Paragraph Example"})
+Paragraph:Set({Title = "Paragraph Example", Content = "Paragraph Example"})
+Rayfield:LoadConfiguration()
