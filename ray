@@ -1,83 +1,54 @@
-local Window = Rayfield:CreateWindow({
-   Name = "SSided Hub",
-   Icon = 81479227271636, -- Icon in Topbar. Can use Lucide Icons (string) or Roblox Image (number). 0 to use no icon (default).
-   LoadingTitle = "SSided Hub",
-   LoadingSubtitle = "By Noli and Alice",
-   Theme = "Dark Blue", -- Check https://docs.sirius.menu/rayfield/configuration/themes
+local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/shlexware/Orion/main/source')))()
+local Window = OrionLib:MakeWindow({Name = "Title of the library", HidePremium = false, SaveConfig = true, ConfigFolder = "OrionTest"})
 
-   DisableRayfieldPrompts = false,
-   DisableBuildWarnings = false, -- Prevents Rayfield from warning when the script has a version mismatch with the interface
-
-   ConfigurationSaving = {
-      Enabled = true,
-      FolderName = Universal, -- Create a custom folder for your hub/game
-      FileName = "Universal Scripts"
-   },
-
-   Discord = {
-      Enabled = false, -- Prompt the user to join your Discord server if their executor supports it
-      Invite = "noinvitelink", -- The Discord invite code, do not include discord.gg/. E.g. discord.gg/ ABCD would be ABCD
-      RememberJoins = true -- Set this to false to make them join the discord every time they load it up
-   },
-
-   KeySystem = False, -- Set this to true to use our key system
-   KeySettings = {
-      Title = "SShub",
-      Subtitle = "Key System",
-      Note = "No method of obtaining the key is provided", -- Use this to tell the user how to get a key
-      FileName = "Key", -- It is recommended to use something unique as other scripts using Rayfield may overwrite your key file
-      SaveKey = true, -- The user's key will be saved, but if you change the key, they will be unable to use your script
-      GrabKeyFromSite = false, -- If this is true, set Key below to the RAW site you would like Rayfield to get the key from
-      Key = {"Hello"} -- List of keys that will be accepted by the system, can be RAW file links (pastebin, github etc) or simple strings ("hello","key22")
-   }
+--[[
+Name = FE Universals - The name of the UI.
+HidePremium = <bool> - Whether or not the user details shows Premium status or not.
+SaveConfig = <bool> - Toggles the config saving in the UI.
+ConfigFolder = Fe universals - The name of the folder where the configs are saved.
+IntroEnabled = <bool> - Whether or not to show the intro animation.
+IntroText = <string> - Text to show in the intro animation.
+IntroIcon = <string> - URL to the image you want to use in the intro animation.
+Icon = <string> - URL to the image you want displayed on the window.
+CloseCallback = <function> - Function to execute when the window is closed.
+]]
+local Tab = Window:MakeTab({
+	Name = "Our Creations",
+	Icon = "rbxassetid://81479227271636",
+	PremiumOnly = false
 })
-local Section = Tab:CreateSection("Our Creation")
-Section:Set("Our Creation")
-local Divider = Tab:CreateDivider()
-Divider:Set(true) -- Whether the divider's visibility is to be set to true or false.
-Rayfield:Destroy()
-({   Title = "SShub Loaded",   Content = "Welcome my friend",   Duration = 6.5,   Image = 4483362458,})
-Rayfield:Notify({
-   Title = "Notification Title",
-   Content = "Notification Content",
-   Duration = 6.5,
-   Image = "scroll-text",
+
+--[[
+Name = <string> - The name of the tab.
+Icon = <string> - The icon of the tab.
+PremiumOnly = <bool> - Makes the tab accessible to Sirus Premium users only.
+]]
+local Section = Tab:AddSection({
+	Name = "Our Creation 🔥"
 })
---Our creations here btw
-local Button = Tab:CreateButton({
-   Name = "Fe Fighter (discontinued)",
-   Callback = function()
+
+--[[
+Name = Fe Fighter (discontinued) - The name of the section.
+]]
+Tab:AddButton({
+	Name = "Button!",
+	Callback = function()
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Fe-ProjectR/FE-Files/refs/heads/main/Fe%20gale.lua"))("cool")
- end,
+      		print("button pressed")
+  	end    
 })
-Button:Set("Fe Fighter")
-local Button = Tab:CreateButton({
-   Name = "Fe Fighter Optimized",
-   Callback = function()
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Fe-ProjectR/FE-Files/refs/heads/main/Fe%20fighter%20optimized"))("cool")
- end,
+
+--[[
+Name = <string> - The name of the button.
+Callback = <function> - The function of the button.
+]]
+Tab1:AddToggle({
+    Name = "Toggle",
+    Default = true,
+    Save = true,
+    Flag = "toggle"
 })
-Button:Set("Fe Fighter Optimized")
-local Tab = Window:CreateTab("Community Creation", globe) -- Title, Image
-local Section = Tab:CreateSection("Community Creation")
-Section:Set("Community Creation")
-local Divider = Tab:CreateDivider()
-Divider:Set(true) -- Whether the divider's visibility is to be set to true or false.
---Keybind for PC duds
-local Keybind = Tab:CreateKeybind({
-   Name = "Keybind Example",
-   CurrentKeybind = "Q",
-   HoldToInteract = false,
-   Flag = "Keybind1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
-   Callback = function(Keybind)
-   -- The function that takes place when the keybind is pressed
-   -- The variable (Keybind) is a boolean for whether the keybind is being held or not (HoldToInteract needs to be true)
-   end,
-})
-Keybind:Set("RightCtrl") -- Keybind (string)
-Rayfield:LoadConfiguration()
 
-
-
-
-
+print(OrionLib.Flags["toggle"].Value) -- prints the value of the toggle.
+OrionLib:Init()
+OrionLib:Destroy()
