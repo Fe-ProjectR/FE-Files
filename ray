@@ -1,5 +1,5 @@
 local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/shlexware/Orion/main/source')))()
-local Window = OrionLib:MakeWindow({Name = "SSided Universal", HidePremium = false, SaveConfig = true, ConfigFolder = "OrionTest"})
+local Window = OrionLib:MakeWindow({Name = "SSided", HidePremium = false, SaveConfig = true, ConfigFolder = "OrionTest"})
 
 --[[
 Name = FE Universals - The name of the UI.
@@ -7,7 +7,7 @@ HidePremium = <bool> - Whether or not the user details shows Premium status or n
 SaveConfig = <bool> - Toggles the config saving in the UI.
 ConfigFolder = Fe universals - The name of the folder where the configs are saved.
 IntroEnabled = true - Whether or not to show the intro animation.
-IntroText = SSided Universal - Text to show in the intro animation.
+IntroText = SSided - Text to show in the intro animation.
 IntroIcon = rbxassetid://81479227271636 - URL to the image you want to use in the intro animation.
 Icon = rbxassetid://81479227271636 - URL to the image you want displayed on the window.
 CloseCallback = <function> - Function to execute when the window is closed.
