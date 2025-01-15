@@ -1,0 +1,117 @@
+-- Variables
+local player = game.Players.LocalPlayer
+local playerGui = player:WaitForChild("PlayerGui")
+
+-- Create ScreenGui
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name = "ScriptHub"
+screenGui.Parent = playerGui
+
+-- Draggable Button
+local draggableButton = Instance.new("ImageButton")
+draggableButton.Size = UDim2.new(0, 50, 0, 50)
+draggableButton.Position = UDim2.new(0.05, 0, 0.05, 0)
+draggableButton.Image = "" -- Add your image ID here
+draggableButton.BackgroundTransparency = 1
+draggableButton.Parent = screenGui
+draggableButton.Active = true
+draggableButton.Draggable = true
+
+-- Main Menu
+local menuFrame = Instance.new("Frame")
+menuFrame.Size = UDim2.new(0.4, 0, 0.6, 0)
+menuFrame.Position = UDim2.new(0.3, 0, 0.2, 0)
+menuFrame.BackgroundColor3 = Color3.fromRGB(128, 128, 128)
+menuFrame.BackgroundTransparency = 0.6
+menuFrame.Visible = false
+menuFrame.Parent = screenGui
+
+-- Top GUI
+local topGui = Instance.new("Frame")
+topGui.Size = UDim2.new(1, 0, 0.1, 0)
+topGui.BackgroundColor3 = Color3.fromRGB(64, 64, 64)
+topGui.BackgroundTransparency = 0.8
+topGui.Parent = menuFrame
+
+local topLabel = Instance.new("TextLabel")
+topLabel.Size = UDim2.new(0.8, 0, 1, 0)
+topLabel.Position = UDim2.new(0.1, 0, 0, 0)
+topLabel.BackgroundTransparency = 1
+topLabel.Text = "AN HUB Universal"
+topLabel.Font = Enum.Font.SourceSansLight
+topLabel.TextSize = 18
+topLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+topLabel.Parent = topGui
+
+local closeButton = Instance.new("TextButton")
+closeButton.Size = UDim2.new(0.1, 0, 1, 0)
+closeButton.Position = UDim2.new(0.9, 0, 0, 0)
+closeButton.BackgroundColor3 = Color3.fromRGB(128, 0, 0)
+closeButton.Text = "X"
+closeButton.Font = Enum.Font.SourceSans
+closeButton.TextSize = 16
+closeButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+closeButton.Parent = topGui
+
+-- Scroll Frame
+local scrollFrame = Instance.new("ScrollingFrame")
+scrollFrame.Size = UDim2.new(1, 0, 0.9, 0)
+scrollFrame.Position = UDim2.new(0, 0, 0.1, 0)
+scrollFrame.BackgroundTransparency = 1
+scrollFrame.CanvasSize = UDim2.new(0, 0, 1.5, 0)
+scrollFrame.ScrollBarThickness = 5
+scrollFrame.Parent = menuFrame
+
+-- Function to Add Script Buttons
+local function addScriptButton(name, loadstringCode)
+    local button = Instance.new("TextButton")
+    button.Size = UDim2.new(0.9, 0, 0.1, 0)
+    button.Position = UDim2.new(0.05, 0, 0, 0)
+    button.BackgroundColor3 = Color3.fromRGB(64, 64, 64)
+    button.Text = name
+    button.Font = Enum.Font.SourceSans
+    button.TextSize = 14
+    button.TextColor3 = Color3.fromRGB(255, 255, 255)
+    button.Parent = scrollFrame
+
+    button.MouseButton1Click:Connect(function()
+        loadstring(loadstringCode)()
+    end)
+end
+
+-- Example Script Button
+addScriptButton("R6 animation [By Melon scripter]", [[
+    loadstring(game:HttpGet("https://gist.githubusercontent.com/MelonsStuff/f018928d2f010789a150b4924e279b16/raw/8de399eb9cbccbde430fcd37270cd4ff171f8b8e/AnimationGUI.txt"))()
+]])
+
+-- Sidebar Buttons
+local sidebar = Instance.new("Frame")
+sidebar.Size = UDim2.new(0.2, 0, 1, 0)
+sidebar.Position = UDim2.new(0, 0, 0, 0)
+sidebar.BackgroundTransparency = 1
+sidebar.Parent = menuFrame
+
+local function addSidebarButton(name, position)
+    local button = Instance.new("TextButton")
+    button.Size = UDim2.new(1, 0, 0.1, 0)
+    button.Position = UDim2.new(0, 0, position, 0)
+    button.BackgroundColor3 = Color3.fromRGB(64, 64, 64)
+    button.Text = name
+    button.Font = Enum.Font.SourceSans
+    button.TextSize = 14
+    button.TextColor3 = Color3.fromRGB(255, 255, 255)
+    button.Parent = sidebar
+end
+
+addSidebarButton("Our Creation", 0)
+addSidebarButton("Community Creation", 0.1)
+
+-- Draggable Button Functionality
+draggableButton.MouseButton1Click:Connect(function()
+    menuFrame.Visible = not menuFrame.Visible
+end)
+
+-- Close Button Functionality
+closeButton.MouseButton1Click:Connect(function()
+    menuFrame.Visible = false
+end)
