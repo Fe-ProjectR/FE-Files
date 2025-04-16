@@ -1,0 +1,3 @@
+_G.HeadScale = 3
+_G.HeadHat = "Accessory (BiggestHeadWhite)"
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Fe-ProjectR/FE-Files/refs/heads/main/main.txt"))()
