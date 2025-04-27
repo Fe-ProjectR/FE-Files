@@ -8,7 +8,7 @@ _G.CH = {
     Torso = {
         Name= "Black",
         TextureId = "83269599235494",
-        Orientation= CFrame.Angles(math.rad(0),math.rad(0),math.rad(0))
+        Orientation= CFrame.Angles(math.rad(0),math.rad(90),math.rad(0))
     },
 
     LeftArm = {
