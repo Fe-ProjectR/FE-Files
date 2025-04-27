@@ -7,7 +7,7 @@ _G.CustomHats = false -- Enable or disable custom rig feature (basically old oxi
 _G.CH = {
     Torso = {
         Name= "Black",
-        TextureId = "14251599953",
+        TextureId = "83269599235494",
         Orientation= CFrame.Angles(math.rad(0),math.rad(0),math.rad(0))
     },
 
