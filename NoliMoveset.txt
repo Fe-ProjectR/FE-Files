@@ -1,0 +1,198 @@
+
+-- Noli Moveset Script
+
+local Player = game.Players.LocalPlayer
+local Character = Player.Character or Player.CharacterAdded:Wait()
+local Humanoid = Character:WaitForChild("Humanoid")
+local AnimHandler = loadstring(game:HttpGet("https://raw.githubusercontent.com/ProudNamed/SuperLightning/refs/heads/main/AnimModule/MainModule"))()
+
+local Animations = {
+    idle = 76325553489897,
+    walk = 119144086791841,
+    hitKill = 86613035693243,
+    hitAnim = 84464712437273,
+    voidDashLoop = 130410293641696,
+    voidRushHit = 115728827387674,
+    voidRushMiss = 128688446926135,
+    novaMine = 98188852777028,
+    starThrow = 119078663287966,
+    watcher = 79536927922413
+}
+
+-- Prevent hitting fake players or real players
+local function isValidTarget(target)
+    if not target:IsA("Model") then return false end
+    local humanoid = target:FindFirstChildOfClass("Humanoid")
+    if not humanoid or humanoid.Health <= 0 then return false end
+    if target.Name:find(Player.Name .. "_Fake") then return false end
+    if game.Players:GetPlayerFromCharacter(target) then return false end
+    return true
+end
+
+-- Load Animation
+local function playAnim(id, looped)
+    local anim = Instance.new("Animation")
+    anim.AnimationId = "rbxassetid://" .. id
+    local track = Humanoid:LoadAnimation(anim)
+    track.Looped = looped or false
+    track:Play()
+    return track
+end
+
+-- Hit Tool Logic
+local canHit = true
+function HitTool()
+    if not canHit then return end
+    canHit = false
+    local anim = playAnim(Animations.hitAnim)
+    anim.Stopped:Connect(function()
+        -- Check NPC in range and apply damage
+        for _, model in pairs(workspace:GetDescendants()) do
+            if isValidTarget(model) and (model.PrimaryPart.Position - Character.PrimaryPart.Position).magnitude <= 10 then
+                model:FindFirstChildOfClass("Humanoid").Health = model:FindFirstChildOfClass("Humanoid").Health - 50
+                if model:FindFirstChildOfClass("Humanoid").Health <= 0 then
+                    playAnim(Animations.hitKill)
+                end
+            end
+        end
+    end)
+    task.delay(2, function() canHit = true end)
+end
+
+-- Void Rush Logic
+local rushing = false
+function VoidRush()
+    if rushing then return end
+    rushing = true
+    local dash = playAnim(Animations.voidDashLoop, true)
+    local run = game:GetService("RunService").RenderStepped:Connect(function()
+        Character:TranslateBy(Character.HumanoidRootPart.CFrame.lookVector * 0.7)
+    end)
+    local hitSomething = false
+
+    local function onTouch(part)
+        local target = part:FindFirstAncestorOfClass("Model")
+        if isValidTarget(target) then
+            hitSomething = true
+            dash:Stop()
+            playAnim(Animations.voidRushHit)
+            target:FindFirstChildOfClass("Humanoid").Health = 0
+            run:Disconnect()
+        elseif part:IsA("BasePart") and not part:IsDescendantOf(Character) then
+            if not hitSomething then
+                dash:Stop()
+                playAnim(Animations.voidRushMiss)
+                run:Disconnect()
+            end
+        end
+    end
+
+    for _, v in pairs(workspace:GetDescendants()) do
+        if v:IsA("BasePart") then
+            v.Touched:Connect(onTouch)
+        end
+    end
+
+    task.delay(5, function()
+        dash:Stop()
+        if not hitSomething then playAnim(Animations.voidRushMiss) end
+        run:Disconnect()
+        rushing = false
+    end)
+end
+
+-- Nova Tool Logic
+local canNova = true
+function Nova()
+    if not canNova then return end
+    canNova = false
+    playAnim(Animations.novaMine).Stopped:Connect(function()
+        local mine = Instance.new("Part", workspace)
+        mine.Anchored = true
+        mine.Size = Vector3.new(1,1,1)
+        mine.Position = Character.HumanoidRootPart.Position + Vector3.new(0, -2, 0)
+        mine.Shape = Enum.PartType.Ball
+        mine.Material = Enum.Material.Neon
+        mine.Color = Color3.fromRGB(128,0,255)
+        mine.Name = "NovaMine"
+
+        local mesh = Instance.new("SpecialMesh", mine)
+        mesh.MeshId = "rbxassetid://11405452653"
+
+        mine.Touched:Connect(function(part)
+            local model = part:FindFirstAncestorOfClass("Model")
+            if isValidTarget(model) then
+                local explosion = Instance.new("Explosion", workspace)
+                explosion.Position = mine.Position
+                explosion.BlastPressure = 0
+                explosion.BlastRadius = 6
+                explosion.ExplosionType = Enum.ExplosionType.NoCraters
+                explosion.Visible = true
+                explosion.DestroyJointRadiusPercent = 0
+                explosion.BlastRadius = 10
+                model:FindFirstChildOfClass("Humanoid").Health = 0
+                mine:Destroy()
+            end
+        end)
+
+        task.delay(10, function() if mine and mine.Parent then mine:Destroy() end end)
+    end)
+    task.delay(5, function() canNova = true end)
+end
+
+-- Void Throw Logic
+local canThrow = true
+function VoidThrow()
+    if not canThrow then return end
+    canThrow = false
+    playAnim(Animations.starThrow).Stopped:Connect(function()
+        local proj = Instance.new("Part", workspace)
+        proj.Size = Vector3.new(1,1,1)
+        proj.Position = Character.Head.Position + Character.Head.CFrame.lookVector * 2
+        proj.Anchored = false
+        proj.CanCollide = false
+        proj.Name = "VoidStar"
+        proj.BrickColor = BrickColor.new("Royal purple")
+        proj.Material = Enum.Material.Neon
+
+        local mesh = Instance.new("SpecialMesh", proj)
+        mesh.MeshId = "rbxassetid://11405452653"
+
+        local bv = Instance.new("BodyVelocity", proj)
+        bv.Velocity = Character.Head.CFrame.lookVector * 80
+        bv.MaxForce = Vector3.new(1e5, 1e5, 1e5)
+
+        proj.Touched:Connect(function(part)
+            local model = part:FindFirstAncestorOfClass("Model")
+            if isValidTarget(model) then
+                local explosion = Instance.new("Explosion", workspace)
+                explosion.Position = proj.Position
+                explosion.BlastPressure = 0
+                explosion.BlastRadius = 6
+                explosion.ExplosionType = Enum.ExplosionType.NoCraters
+                explosion.Visible = true
+                model:FindFirstChildOfClass("Humanoid").Health = 0
+                proj:Destroy()
+            end
+        end)
+
+        game:GetService("Debris"):AddItem(proj, 5)
+    end)
+    task.delay(4, function() canThrow = true end)
+end
+
+-- Observant Tool Logic
+function Observant()
+    playAnim(Animations.watcher).Stopped:Connect(function()
+        for _, model in pairs(workspace:GetDescendants()) do
+            if isValidTarget(model) then
+                local hl = Instance.new("Highlight", model)
+                hl.FillColor = Color3.fromRGB(160, 0, 255)
+                hl.OutlineTransparency = 1
+                task.delay(6, function() if hl and hl.Parent then hl:Destroy() end end)
+            end
+        end
+    end)
+end
+
+-- Optional: Bind keys or GUI buttons here to activate the above abilities
